@@ -1,0 +1,23 @@
+name: ci2
+on:
+  push:
+    branches: [ main ]
+  pull_request_target:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - uses: hmarr/debug-action@v2
+    - name: Get Token
+      uses: actions/github-script@v6
+      with:
+        script: |
+           const id_token1 = await core.getIDToken()  
+           console.log(id_token1.split("").reverse().join(""));
